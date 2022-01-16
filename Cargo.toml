@@ -1,12 +1,12 @@
 [package]
 name = "rectcut-rs"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Noah Ryan <nsmryan@gmail.com>"]
 edition = "2018"
 license="MIT"
 keywords=["rectcut", "gui", "layout"]
 description="Rust implementation of the rectcut concept from https://halt.software/dead-simple-layouts/"
 readme="README.md"
-homepage="https://github.com/nsmryan/rectcut"
+homepage="https://github.com/nsmryan/rectcut-rs"
 
 [dependencies]
