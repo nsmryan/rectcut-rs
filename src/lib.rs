@@ -1,4 +1,6 @@
 
+/// The Rect struct represents an area, such as an area of the screen,
+/// by its minimum x and y and maximum x and y.
 #[derive(Copy, Clone, Debug)]
 pub struct Rect {
     pub minx: f32,
@@ -8,10 +10,12 @@ pub struct Rect {
 }
 
 impl Rect {
+    /// Create a new Rect.
     pub fn new(minx: f32, miny: f32, maxx: f32, maxy: f32) -> Rect {
         return Rect { minx, miny, maxx, maxy };
     }
 
+    /// Cut out the left of the rect, returning the left piece and modifying the original Rect.
     pub fn cut_left(&mut self, a: f32) -> Rect {
         let minx: f32 = self.minx;
         if self.maxx < self.minx + a {
@@ -22,6 +26,7 @@ impl Rect {
         return Rect::new(minx, self.miny, self.minx, self.maxy);
     }
 
+    /// Cut out the right of the rect, returning the right piece and modifying the original Rect.
     pub fn cut_right(&mut self, a: f32) -> Rect {
         let maxx: f32 = self.maxx;
         if self.minx > self.maxx - a {
@@ -32,6 +37,7 @@ impl Rect {
         return Rect::new(self.maxx, self.miny, maxx, self.maxy);
     }
 
+    /// Cut out the top of the rect, returning the top piece and modifying the original Rect.
     pub fn cut_top(&mut self, a: f32) -> Rect {
         let miny: f32 = self.miny;
         if self.maxy < self.miny + a {
@@ -42,6 +48,7 @@ impl Rect {
         return Rect::new(self.minx, miny, self.maxx, self.miny);
     }
 
+    /// Cut out the bottom of the rect, returning the bottom piece and modifying the original Rect.
     pub fn cut_bottom(&mut self, a: f32) -> Rect {
         let maxy: f32 = self.maxy;
         if self.miny > self.maxy - a {
@@ -52,6 +59,7 @@ impl Rect {
         return Rect::new(self.minx, self.maxy, self.maxx, maxy);
     }
 
+    /// Cut out the left of the rect, leaving the original unmodified.
     pub fn get_left(&self, a: f32) -> Rect {
         let maxx;
         if self.maxx < self.minx + a {
@@ -62,6 +70,7 @@ impl Rect {
         return Rect::new(self.minx, self.miny, maxx, self.maxy);
     }
 
+    /// Cut out the right of the rect, leaving the original unmodified.
     pub fn get_right(&self, a: f32) -> Rect {
         let minx;
         if self.minx > self.maxx - a {
@@ -72,6 +81,7 @@ impl Rect {
         return Rect::new(minx, self.miny, self.maxx, self.maxy);
     }
 
+    /// Cut out the top of the rect, leaving the original unmodified.
     pub fn get_top(&self, a: f32) -> Rect {
         let maxy;
         if self.maxy < self.miny + a {
@@ -82,6 +92,7 @@ impl Rect {
         return Rect::new(self.minx, self.miny, self.maxx, maxy);
     }
 
+    /// Cut out the bottom of the rect, leaving the original unmodified.
     pub fn get_bottom(&self, a: f32) -> Rect {
         let miny;
         if self.miny > self.maxy - a {
@@ -92,26 +103,36 @@ impl Rect {
         return Rect::new(self.minx, miny, self.maxx, self.maxy);
     }
 
+    /// Create a rect that extends the given rect out to the left,
+    /// leaving the original unmodified.
     pub fn add_left(&self, a: f32) -> Rect {
         return Rect::new(self.minx - a, self.miny, self.minx, self.maxy);
     }
 
+    /// Create a rect that extends the given rect out to the right,
+    /// leaving the original unmodified.
     pub fn add_right(&self, a: f32) -> Rect {
         return Rect::new(self.maxx, self.miny, self.maxx + a, self.maxy);
     }
 
+    /// Create a rect that extends the given rect out to the top,
+    /// leaving the original unmodified.
     pub fn add_top(&self, a: f32) -> Rect {
         return Rect::new(self.minx, self.miny - a, self.maxx, self.miny);
     }
 
+    /// Create a rect that extends the given rect out to the bottom,
+    /// leaving the original unmodified.
     pub fn add_bottom(&self, a: f32) -> Rect {
         return Rect::new(self.minx, self.maxy, self.maxx, self.maxy + a);
     }
 
+    /// Extend the rect out in all directions, leaving the original unmodified.
     pub fn extend(&self, a: f32) -> Rect {
         return Rect::new(self.minx - a, self.miny - a, self.maxx + a, self.maxy + a);
     }
 
+    /// Conctract the rect in all directions, leaving the original unmodified.
     pub fn contract(&self, a: f32) -> Rect {
         return Rect::new(self.minx + a, self.miny + a, self.maxx - a, self.maxy - a);
     }
@@ -293,6 +314,8 @@ pub fn test_contract() {
     assert_eq!(9.0, contract.maxy);
 }
 
+/// A RectCutSide represents a side of the rectangle. This allows
+/// the user to choose a side dynamically using a RectCut.
 #[derive(Copy, Clone, Debug, PartialOrd, Ord, PartialEq, Eq)]
 pub enum RectCutSide {
     Left,
@@ -301,6 +324,9 @@ pub enum RectCutSide {
     Bottom,
 }
 
+/// A RectCut wraps a Rect along with a side. This allows the
+/// user to fix the side and pass the rect-and-side together
+/// into other code.
 #[derive(Copy, Clone, Debug)]
 struct RectCut {
     pub rect: Rect,
@@ -308,10 +334,13 @@ struct RectCut {
 }
 
 impl RectCut {
+    /// Create a new RectCut.
     pub fn new(rect: Rect, side: RectCutSide) -> RectCut {
         return RectCut { rect, side };
     }
 
+    /// Cut out from the RectCut, returning the new Rect
+    /// and modifying the internal Rect.
     pub fn cut(&mut self, a: f32) -> Rect {
         match self.side {
             RectCutSide::Left =>   return self.rect.cut_left(a),
