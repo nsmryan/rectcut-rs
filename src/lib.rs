@@ -132,7 +132,7 @@ impl Rect {
         return Rect::new(self.minx - a, self.miny - a, self.maxx + a, self.maxy + a);
     }
 
-    /// Conctract the rect in all directions, leaving the original unmodified.
+    /// Contract the rect in all directions, leaving the original unmodified.
     pub fn contract(&self, a: f32) -> Rect {
         return Rect::new(self.minx + a, self.miny + a, self.maxx - a, self.maxy - a);
     }
